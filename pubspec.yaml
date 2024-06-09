@@ -10,16 +10,16 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  animate_do: ^3.0.2
-  camera: ^0.10.1
-  collection: ^1.16.0
-  equatable: ^2.0.5
+  animate_do: 
+  camera: 
+  collection: 
+  equatable:
   flutter:
     sdk: flutter
-  google_mlkit_face_detection: ^0.5.0
-  image: ^3.0.2
-  lottie: ^2.1.0
-  plugin_platform_interface: ^2.0.2
+  google_mlkit_face_detection: 
+  image: 
+  lottie: 
+  plugin_platform_interface: 
 
 dependency_overrides:
   camera_android:
