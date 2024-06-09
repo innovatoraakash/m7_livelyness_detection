@@ -2,39 +2,31 @@ import 'package:m7_livelyness_detection/index.dart';
 
 extension MLKitUtils on AnalysisImage {
   InputImage toInputImage() {
-    final planeData =
-        when(nv21: (img) => img.planes, bgra8888: (img) => img.planes)?.map(
-      (plane) {
-        return InputImagePlaneMetadata(
-          bytesPerRow: plane.bytesPerRow,
-          height: height,
-          width: width,
-        );
-      },
-    ).toList();
+    final planeDataBytesPerRow =
+        when(nv21: (img) => img.planes, bgra8888: (img) => img.planes)?.first.bytesPerRow??0;
 
     return when(nv21: (image) {
       return InputImage.fromBytes(
         bytes: image.bytes,
-        inputImageData: InputImageData(
-          imageRotation: inputImageRotation,
-          inputImageFormat: InputImageFormat.nv21,
-          planeData: planeData,
+        metadata: InputImageMetadata(
+          rotation: inputImageRotation,
+          format: InputImageFormat.nv21,
+          bytesPerRow: planeDataBytesPerRow,
           size: image.size,
         ),
       );
     }, bgra8888: (image) {
-      final inputImageData = InputImageData(
+      final inputImageData = InputImageMetadata(
         size: size,
         // FIXME: seems to be ignored on iOS...
-        imageRotation: inputImageRotation,
-        inputImageFormat: inputImageFormat,
-        planeData: planeData,
+        rotation: inputImageRotation,
+        format: inputImageFormat,
+        bytesPerRow: image.planes.first.bytesPerRow,
       );
 
       return InputImage.fromBytes(
         bytes: image.bytes,
-        inputImageData: inputImageData,
+        metadata: inputImageData,
       );
     })!;
   }
