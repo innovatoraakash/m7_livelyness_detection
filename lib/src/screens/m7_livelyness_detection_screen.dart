@@ -171,13 +171,13 @@ class _MLivelyness7DetectionScreenState
     );
     if (inputImageFormat == null) return;
 
-
+    final bytesperrow = cameraImage.planes.first.bytesPerRow;
 
     final inputImageData = InputImageMetadata(
       size: imageSize,
       rotation: imageRotation,
       format: inputImageFormat,
-      bytesPerRow: cameraImage.planes.first.bytesPerRow,
+      bytesPerRow: bytesperrow,
     );
 
     final inputImage = InputImage.fromBytes(

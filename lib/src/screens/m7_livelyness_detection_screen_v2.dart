@@ -119,7 +119,7 @@ class _M7LivelynessDetectionScreenAndroidState
       _faceDetectionController.add(
         FaceDetectionModel(
           faces: detectedFaces,
-          absoluteImageSize: inputImage.inputImageData!.size,
+          absoluteImageSize: inputImage.metadata!.size,
           rotation: 0,
           imageRotation: img.inputImageRotation,
           croppedSize: img.croppedSize,
