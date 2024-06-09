@@ -1,6 +1,6 @@
 name: m7_livelyness_detection
 description: A single function package to detect weather the face visible in the camera is a live face or not.
-version: 0.0.4+5
+version: 0.0.6+4
 homepage: https://github.com/Meet-7-dating/m7_livelyness_detection
 repository: https://github.com/Meet-7-dating/m7_livelyness_detection/
 issue_tracker: https://github.com/Meet-7-dating/m7_livelyness_detection/issues
@@ -21,12 +21,11 @@ dependencies:
   lottie: 
   plugin_platform_interface: 
 
-dependency_overrides:
-  camera_android:
-    git:
-      url: https://github.com/bottlepay/plugins.git
-      path: packages/camera/camera_android
-      ref: e1a4dba770da9bc3cf9f858bac6837083f8b9059
+  rxdart: ^0.27.7
+  camerawesome: ^1.4.0
+  uuid: ^3.0.7
+
+
 
 dev_dependencies:
   flutter_test:
