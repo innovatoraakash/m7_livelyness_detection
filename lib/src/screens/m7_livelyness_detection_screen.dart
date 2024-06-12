@@ -404,7 +404,7 @@ class _MLivelyness7DetectionScreenState
           (p0) => p0 is M7HeadTurnDetectionThreshold,
         ) as M7HeadTurnDetectionThreshold?;
         if ((face.headEulerAngleY ?? 0) >
-            (headTurnThreshold?.rotationAngle ?? -50)) {
+            -(headTurnThreshold?.rotationAngle ?? 50)) {
           _startProcessing();
           await _completeStep(step: step);
         }

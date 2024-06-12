@@ -83,14 +83,17 @@ class M7LivelynessDetection {
     _safeAreaPadding = MediaQuery.of(context).padding;
     final M7CapturedImage? capturedFacePath = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => Platform.isIOS
-            ? M7LivelynessDetectionScreenV1(
+          builder: (context) => M7LivelynessDetectionScreenV1(
                 config: config,
               )
-            : M7LivelynessDetectionPageV2(
-                config: config,
-              ),
-      ),
+          //  Platform.isIOS
+          //     ? M7LivelynessDetectionScreenV1(
+          //         config: config,
+          //       )
+          //     : M7LivelynessDetectionPageV2(
+          //         config: config,
+          //       ),
+          ),
     );
     return capturedFacePath;
   }
