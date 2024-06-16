@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:m7_livelyness_detection/index.dart';
 
 class M7LivelynessDetectionPageV2 extends StatelessWidget {
@@ -52,12 +53,18 @@ class _M7LivelynessDetectionScreenAndroidState
   late final faceDetector = FaceDetector(options: options);
   bool _didCloseEyes = false;
   bool _isProcessingStep = false;
+  Size? imageSize;
+  M7BlinkDetectionThreshold blinkThreshold = M7BlinkDetectionThreshold();
+  M7HeadTurnDetectionThreshold headTurnThreshold =
+      M7HeadTurnDetectionThreshold();
+  M7SmileDetectionThreshold smileThreshold = M7SmileDetectionThreshold();
 
   late final List<M7LivelynessStepItem> _steps;
   final GlobalKey<M7LivelynessDetectionStepOverlayState> _stepsKey =
       GlobalKey<M7LivelynessDetectionStepOverlayState>();
 
   CameraState? _cameraState;
+  // Face? detectedFace;
   bool _isProcessing = false;
   late bool _isInfoStepCompleted;
   Timer? _timerToDetectFace;
@@ -97,6 +104,21 @@ class _M7LivelynessDetectionScreenAndroidState
   }
 
   void _postFrameCallBack() {
+    blinkThreshold =
+        (M7LivelynessDetection.instance.thresholdConfig.firstWhereOrNull(
+              (p0) => p0 is M7BlinkDetectionThreshold,
+            ) as M7BlinkDetectionThreshold?) ??
+            blinkThreshold;
+    smileThreshold =
+        (M7LivelynessDetection.instance.thresholdConfig.firstWhereOrNull(
+              (p0) => p0 is M7SmileDetectionThreshold,
+            ) as M7SmileDetectionThreshold?) ??
+            smileThreshold;
+    headTurnThreshold =
+        (M7LivelynessDetection.instance.thresholdConfig.firstWhereOrNull(
+              (p0) => p0 is M7HeadTurnDetectionThreshold,
+            ) as M7HeadTurnDetectionThreshold?) ??
+            headTurnThreshold;
     if (_isInfoStepCompleted) {
       _startTimer();
     }
@@ -147,7 +169,7 @@ class _M7LivelynessDetectionScreenAndroidState
         _resetSteps();
         return;
       }
-      final Face firstFace = faces.first;
+      final Face firstFace = _findMainFaceByCenter(faces);
       final landmarks = firstFace.landmarks;
       // Get landmark positions for relevant facial features
       final Point<int>? leftEye = landmarks[FaceLandmarkType.leftEye]?.position;
@@ -164,7 +186,6 @@ class _M7LivelynessDetectionScreenAndroidState
           landmarks[FaceLandmarkType.leftMouth]?.position;
       final Point<int>? rightMouth =
           landmarks[FaceLandmarkType.rightMouth]?.position;
-
       // Calculate symmetry values based on corresponding landmark positions
       final Map<String, double> symmetry = {};
       final eyeSymmetry = calculateSymmetry(
@@ -212,9 +233,78 @@ class _M7LivelynessDetectionScreenAndroidState
         face: firstFace,
         step: _steps[_stepsKey.currentState?.currentIndex ?? 0].step,
       );
+      // detectedFace = _findWellPositionedFace(firstFace) ?? detectedFace;
     } catch (e) {
       _startProcessing();
     }
+  }
+
+  static Face _findMainFaceByCenter(List<Face> faces) {
+    Face mainFace = faces.first;
+    double minWidth = 0;
+
+    for (final face in faces) {
+      final distance = face.boundingBox.width;
+      if (distance > minWidth) {
+        minWidth = distance;
+        mainFace = face;
+      }
+    }
+    return mainFace;
+  }
+
+  Face? _findWellPositionedFace(Face face) {
+    bool wellPositioned = true;
+
+    // Head is rotated to the x degrees
+    if (face.headEulerAngleX! > 10 || face.headEulerAngleX! < -10) {
+      wellPositioned = false;
+    }
+    // Head is rotated to the right rotY degrees
+    if (face.headEulerAngleY! > 10 || face.headEulerAngleY! < -10) {
+      wellPositioned = false;
+    }
+
+    // Head is tilted sideways rotZ degrees
+    if (face.headEulerAngleZ! > 10 || face.headEulerAngleZ! < -10) {
+      wellPositioned = false;
+    }
+
+    // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
+    // eyes, cheeks, and nose available):
+    final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
+    final FaceLandmark? rightEar = face.landmarks[FaceLandmarkType.rightEar];
+    final FaceLandmark? bottomMouth =
+        face.landmarks[FaceLandmarkType.bottomMouth];
+    final FaceLandmark? rightMouth =
+        face.landmarks[FaceLandmarkType.rightMouth];
+    final FaceLandmark? leftMouth = face.landmarks[FaceLandmarkType.leftMouth];
+    final FaceLandmark? noseBase = face.landmarks[FaceLandmarkType.noseBase];
+    if (leftEar == null ||
+        rightEar == null ||
+        bottomMouth == null ||
+        rightMouth == null ||
+        leftMouth == null ||
+        noseBase == null) {
+      wellPositioned = false;
+    }
+
+    if (face.leftEyeOpenProbability != null) {
+      if (face.leftEyeOpenProbability! < 0.5) {
+        wellPositioned = false;
+      }
+    }
+
+    if (face.rightEyeOpenProbability != null) {
+      if (face.rightEyeOpenProbability! < 0.5) {
+        wellPositioned = false;
+      }
+    }
+    print(face.toString());
+    if (wellPositioned) {
+      return face;
+    }
+    return null;
   }
 
   Future<void> _completeStep({
@@ -240,9 +330,8 @@ class _M7LivelynessDetectionScreenAndroidState
   }) async {
     switch (step) {
       case M7LivelynessStep.blink:
-        const double blinkThreshold = 0.25;
-        if ((face.leftEyeOpenProbability ?? 1.0) < (blinkThreshold) &&
-            (face.rightEyeOpenProbability ?? 1.0) < (blinkThreshold)) {
+        if ((face.leftEyeOpenProbability ?? 1.0) < (blinkThreshold.leftEyeProbability) &&
+            (face.rightEyeOpenProbability ?? 1.0) < (blinkThreshold.rightEyeProbability)) {
           _startProcessing();
           if (mounted) {
             setState(
@@ -252,22 +341,20 @@ class _M7LivelynessDetectionScreenAndroidState
         }
         break;
       case M7LivelynessStep.turnLeft:
-        const double headTurnThreshold = 45.0;
-        if ((face.headEulerAngleY ?? 0) > (headTurnThreshold)) {
+        if ((face.headEulerAngleY ?? 0) > (headTurnThreshold.rotationAngle)) {
           _startProcessing();
           await _completeStep(step: step);
         }
         break;
       case M7LivelynessStep.turnRight:
-        const double headTurnThreshold = -50.0;
-        if ((face.headEulerAngleY ?? 0) > (headTurnThreshold)) {
+        if ((face.headEulerAngleY ?? 0) < (-headTurnThreshold.rotationAngle)) {
           _startProcessing();
           await _completeStep(step: step);
         }
         break;
       case M7LivelynessStep.smile:
-        const double smileThreshold = 0.75;
-        if ((face.smilingProbability ?? 0) > (smileThreshold)) {
+        // const double smileThreshold = 0.75;
+        if ((face.smilingProbability ?? 0) > (smileThreshold.probability)) {
           _startProcessing();
           await _completeStep(step: step);
         }
@@ -325,6 +412,9 @@ class _M7LivelynessDetectionScreenAndroidState
         const Duration(milliseconds: 500),
         () => p0.takePhoto().then(
           (value) {
+            // if (detectedFace != null) {
+            //   cropImage(File(value), detectedFace!.boundingBox);
+            // }
             _onDetectionCompleted(
               imgToReturn: value,
               didCaptureAutomatically: didCaptureAutomatically,
