@@ -48,7 +48,7 @@ class _M7LivelynessDetectionScreenAndroidState
     enableTracking: true,
     enableLandmarks: true,
     performanceMode: FaceDetectorMode.accurate,
-    minFaceSize: 0.05,
+    minFaceSize: 0.2,
   );
   late final faceDetector = FaceDetector(options: options);
   bool _didCloseEyes = false;
