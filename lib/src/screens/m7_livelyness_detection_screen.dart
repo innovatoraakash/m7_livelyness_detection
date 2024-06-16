@@ -403,8 +403,8 @@ class _MLivelyness7DetectionScreenState
             M7LivelynessDetection.instance.thresholdConfig.firstWhereOrNull(
           (p0) => p0 is M7HeadTurnDetectionThreshold,
         ) as M7HeadTurnDetectionThreshold?;
-        if ((face.headEulerAngleY ?? 0) >
-            -(headTurnThreshold?.rotationAngle ?? 50)) {
+        var other = -(headTurnThreshold?.rotationAngle ?? 45);
+        if ((face.headEulerAngleY ?? 0) < other) {
           _startProcessing();
           await _completeStep(step: step);
         }
