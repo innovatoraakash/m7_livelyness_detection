@@ -330,8 +330,10 @@ class _M7LivelynessDetectionScreenAndroidState
   }) async {
     switch (step) {
       case M7LivelynessStep.blink:
-        if ((face.leftEyeOpenProbability ?? 1.0) < (blinkThreshold.leftEyeProbability) &&
-            (face.rightEyeOpenProbability ?? 1.0) < (blinkThreshold.rightEyeProbability)) {
+        if ((face.leftEyeOpenProbability ?? 1.0) <
+                (blinkThreshold.leftEyeProbability) &&
+            (face.rightEyeOpenProbability ?? 1.0) <
+                (blinkThreshold.rightEyeProbability)) {
           _startProcessing();
           if (mounted) {
             setState(
@@ -416,7 +418,7 @@ class _M7LivelynessDetectionScreenAndroidState
             //   cropImage(File(value), detectedFace!.boundingBox);
             // }
             _onDetectionCompleted(
-              imgToReturn: value,
+              imgToReturn: value.path,
               didCaptureAutomatically: didCaptureAutomatically,
             );
           },
@@ -476,10 +478,12 @@ class _M7LivelynessDetectionScreenAndroidState
       children: [
         _isInfoStepCompleted
             ? CameraAwesomeBuilder.custom(
-                flashMode: FlashMode.auto,
+                sensorConfig: SensorConfig.single(
+                  flashMode: FlashMode.auto,
+                  aspectRatio: CameraAspectRatios.ratio_16_9,
+                  sensor: Sensor.position(SensorPosition.front),
+                ),
                 previewFit: CameraPreviewFit.contain,
-                aspectRatio: CameraAspectRatios.ratio_16_9,
-                sensor: Sensors.front,
                 onImageForAnalysis: (img) => _processCameraImage(img),
                 imageAnalysisConfig: AnalysisConfig(
                   autoStart: true,
@@ -488,25 +492,26 @@ class _M7LivelynessDetectionScreenAndroidState
                   ),
                   maxFramesPerSecond: 30,
                 ),
-                builder: (state, previewSize, previewRect) {
+                builder: (state, preview) {
                   _cameraState = state;
                   return M7PreviewDecoratorWidget(
                     cameraState: state,
                     faceDetectionStream: _faceDetectionController,
-                    previewSize: previewSize,
-                    previewRect: previewRect,
+                    previewSize: preview.previewSize,
+                    previewRect: preview.rect,
                     detectionColor:
                         _steps[_stepsKey.currentState?.currentIndex ?? 0]
                             .detectionColor,
                   );
                 },
                 saveConfig: SaveConfig.photo(
-                  pathBuilder: () async {
+                  pathBuilder: (sensor) async {
                     final String fileName = "${M7Utils.generate()}.jpg";
                     final String path = await getTemporaryDirectory().then(
                       (value) => value.path,
                     );
-                    return "$path/$fileName";
+                    return SingleCaptureRequest(
+                        "$path/$fileName", sensor.first);
                   },
                 ),
               )

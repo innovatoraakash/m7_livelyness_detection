@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:m7_livelyness_detection/index.dart';
 import 'package:m7_livelyness_detection_example/index.dart';
 
 class M7ExpampleScreen extends StatefulWidget {
@@ -52,6 +53,18 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
           isCompleted: false,
           detectionColor: Colors.green.shade800,
         ),
+        M7LivelynessStepItem(
+          step: M7LivelynessStep.turnLeft,
+          title: "left",
+          isCompleted: false,
+          detectionColor: Colors.green.shade800,
+        ),
+        M7LivelynessStepItem(
+          step: M7LivelynessStep.turnRight,
+          title: "right",
+          isCompleted: false,
+          detectionColor: Colors.green.shade800,
+        ),
       ],
     );
     M7LivelynessDetection.instance.configure(
@@ -69,6 +82,9 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         M7BlinkDetectionThreshold(
           leftEyeProbability: 0.25,
           rightEyeProbability: 0.25,
+        ),
+        M7HeadTurnDetectionThreshold(
+          rotationAngle: 20
         ),
       ],
     );
@@ -105,6 +121,8 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         return "Turn Your Head Right";
       case M7LivelynessStep.smile:
         return "Smile";
+      default:
+        return "Be Straint for capture";
     }
   }
 
@@ -118,6 +136,8 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         return "Detects Right Turn of the on the face visible in camera";
       case M7LivelynessStep.smile:
         return "Detects Smile on the face visible in camera";
+      default:
+        return "Be Straint for capture";
     }
   }
 
