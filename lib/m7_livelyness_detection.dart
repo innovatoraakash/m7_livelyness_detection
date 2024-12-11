@@ -98,6 +98,10 @@ class M7LivelynessDetection {
     return capturedFacePath;
   }
 
+  Widget detectionPage(M7DetectionConfig config) => M7LivelynessDetectionPageV2(
+        config: config,
+      );
+
   /// Configures the shreshold values of which will be used while verfying
   /// Parameters: -
   /// * thresholds: - List of [M7DetectionThreshold] objects.

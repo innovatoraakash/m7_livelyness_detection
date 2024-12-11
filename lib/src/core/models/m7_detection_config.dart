@@ -7,6 +7,9 @@ class M7DetectionConfig {
   /// A boolean value that defines weather the detection should start with a `Info` screen or not.
   /// Default is *false*
   final bool startWithInfoScreen;
+  
+  final bool showStepper;
+  final bool showCloseButton;
 
   /// Duration in which the face detection should get completed.
   /// Default is *15*
@@ -18,13 +21,17 @@ class M7DetectionConfig {
   /// Icon color of the button that will come after the [maxSecToDetect] is completed.
   final Color? captureButtonColor;
 
-  M7DetectionConfig({
-    required this.steps,
-    this.startWithInfoScreen = false,
-    this.maxSecToDetect = 15,
-    this.allowAfterMaxSec = false,
-    this.captureButtonColor,
-  }) {
+  final Function(Widget child, int step)? wrapper;
+
+  M7DetectionConfig(
+      {required this.steps,
+      this.startWithInfoScreen = false,
+      this.maxSecToDetect = 15,
+      this.allowAfterMaxSec = false,
+      this.captureButtonColor,
+      this.showCloseButton = true,
+      this.showStepper = true,
+      this.wrapper}) {
     assert(
       steps.isNotEmpty,
       '''

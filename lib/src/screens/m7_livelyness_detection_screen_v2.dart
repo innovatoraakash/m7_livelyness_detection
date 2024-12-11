@@ -5,7 +5,6 @@ import 'package:m7_livelyness_detection/index.dart';
 
 class M7LivelynessDetectionPageV2 extends StatelessWidget {
   final M7DetectionConfig config;
-
   const M7LivelynessDetectionPageV2({
     required this.config,
     super.key,
@@ -43,9 +42,9 @@ class _M7LivelynessDetectionScreenAndroidState
   final _faceDetectionController = BehaviorSubject<FaceDetectionModel>();
 
   final options = FaceDetectorOptions(
-    enableContours: true,
+    enableContours: false,
     enableClassification: true,
-    enableTracking: true,
+    enableTracking: false,
     enableLandmarks: true,
     performanceMode: FaceDetectorMode.accurate,
     minFaceSize: 0.2,
@@ -494,7 +493,7 @@ class _M7LivelynessDetectionScreenAndroidState
                 ),
                 builder: (state, preview) {
                   _cameraState = state;
-                  return M7PreviewDecoratorWidget(
+                  final child = M7PreviewDecoratorWidget(
                     cameraState: state,
                     faceDetectionStream: _faceDetectionController,
                     previewSize: preview.previewSize,
@@ -503,6 +502,11 @@ class _M7LivelynessDetectionScreenAndroidState
                         _steps[_stepsKey.currentState?.currentIndex ?? 0]
                             .detectionColor,
                   );
+                  if (widget.config.wrapper != null) {
+                    return widget.config.wrapper!(
+                        child, _stepsKey.currentState?.currentIndex ?? 0);
+                  }
+                  return child;
                 },
                 saveConfig: SaveConfig.photo(
                   pathBuilder: (sensor) async {
@@ -526,7 +530,7 @@ class _M7LivelynessDetectionScreenAndroidState
                   );
                 },
               ),
-        if (_isInfoStepCompleted)
+        if (_isInfoStepCompleted && widget.config.showStepper)
           M7LivelynessDetectionStepOverlay(
             key: _stepsKey,
             steps: _steps,
@@ -562,7 +566,7 @@ class _M7LivelynessDetectionScreenAndroidState
             ],
           ),
         ),
-        Align(
+       if(widget.config.showCloseButton) Align(
           alignment: Alignment.topRight,
           child: Padding(
             padding: const EdgeInsets.only(
