@@ -299,7 +299,6 @@ class _M7LivelynessDetectionScreenAndroidState
         wellPositioned = false;
       }
     }
-    print(face.toString());
     if (wellPositioned) {
       return face;
     }
@@ -467,8 +466,6 @@ class _M7LivelynessDetectionScreenAndroidState
     }
   }
 
-  //* MARK: - Private Methods for UI Components
-  //? =========================================================
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -482,7 +479,7 @@ class _M7LivelynessDetectionScreenAndroidState
                   aspectRatio: CameraAspectRatios.ratio_16_9,
                   sensor: Sensor.position(SensorPosition.front),
                 ),
-                previewFit: CameraPreviewFit.contain,
+                previewFit: CameraPreviewFit.cover,
                 onImageForAnalysis: (img) => _processCameraImage(img),
                 imageAnalysisConfig: AnalysisConfig(
                   autoStart: true,
@@ -530,9 +527,10 @@ class _M7LivelynessDetectionScreenAndroidState
                   );
                 },
               ),
-        if (_isInfoStepCompleted && widget.config.showStepper)
+        if (_isInfoStepCompleted)
           M7LivelynessDetectionStepOverlay(
             key: _stepsKey,
+            config: widget.config,
             steps: _steps,
             onCompleted: () => _takePicture(
               didCaptureAutomatically: true,
@@ -566,32 +564,33 @@ class _M7LivelynessDetectionScreenAndroidState
             ],
           ),
         ),
-       if(widget.config.showCloseButton) Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-              top: 10,
-            ),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.black,
-              child: IconButton(
-                onPressed: () {
-                  _onDetectionCompleted(
-                    imgToReturn: null,
-                    didCaptureAutomatically: null,
-                  );
-                },
-                icon: const Icon(
-                  Icons.close_rounded,
-                  size: 20,
-                  color: Colors.white,
+        if (widget.config.showCloseButton)
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                right: 10,
+                top: 10,
+              ),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.black,
+                child: IconButton(
+                  onPressed: () {
+                    _onDetectionCompleted(
+                      imgToReturn: null,
+                      didCaptureAutomatically: null,
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

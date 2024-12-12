@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:m7_livelyness_detection/index.dart';
 import 'package:m7_livelyness_detection_example/index.dart';
+import 'package:m7_livelyness_detection_example/screens/over_painter.dart';
 
 class M7ExpampleScreen extends StatefulWidget {
   const M7ExpampleScreen({super.key});
@@ -83,9 +84,7 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
           leftEyeProbability: 0.25,
           rightEyeProbability: 0.25,
         ),
-        M7HeadTurnDetectionThreshold(
-          rotationAngle: 20
-        ),
+        M7HeadTurnDetectionThreshold(rotationAngle: 20),
       ],
     );
   }
@@ -96,7 +95,18 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         await M7LivelynessDetection.instance.detectLivelyness(
       context,
       config: M7DetectionConfig(
+        showCloseButton: false,
+        showStepper: false,
         steps: _veificationSteps,
+        wrapper: (child, step) {
+          return Stack(fit: StackFit.expand, children: [
+            child,
+            Positioned.fill(
+                child: CustomPaint(
+              painter: OvalFramePainter(step / _veificationSteps.length),
+            ))
+          ]);
+        },
         startWithInfoScreen: _startWithInfo,
         maxSecToDetect: _timeOutDuration == 100 ? 2500 : _timeOutDuration,
         allowAfterMaxSec: _allowAfterTimeOut,

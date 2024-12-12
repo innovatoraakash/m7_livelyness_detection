@@ -3,11 +3,13 @@ import 'package:m7_livelyness_detection/index.dart';
 class M7LivelynessDetectionStepOverlay extends StatefulWidget {
   final List<M7LivelynessStepItem> steps;
   final VoidCallback onCompleted;
+  final M7DetectionConfig config;
   const M7LivelynessDetectionStepOverlay({
-    Key? key,
+    super.key,
     required this.steps,
+    required this.config,
     required this.onCompleted,
-  }) : super(key: key);
+  });
 
   @override
   State<M7LivelynessDetectionStepOverlay> createState() =>
@@ -43,11 +45,8 @@ class M7LivelynessDetectionStepOverlayState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      width: double.infinity,
       color: Colors.transparent,
       child: Stack(
-        fit: StackFit.expand,
         children: [
           _buildBody(),
           Visibility(
@@ -70,18 +69,12 @@ class M7LivelynessDetectionStepOverlayState
     if ((_currentIndex + 1) <= (widget.steps.length - 1)) {
       //Move to next step
       _showLoader();
-      await Future.delayed(
-        const Duration(
-          milliseconds: 500,
-        ),
-      );
+
       await _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeIn,
       );
-      await Future.delayed(
-        const Duration(seconds: 2),
-      );
+
       _hideLoader();
       setState(() => _currentIndex++);
     } else {
@@ -109,53 +102,56 @@ class M7LivelynessDetectionStepOverlayState
   Widget _buildBody() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: 10,
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                flex: _currentIndex + 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
+        widget.config.showStepper
+            ? SizedBox(
+                height: 5,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      flex: _currentIndex + 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                          color: Colors.green.shade800,
+                        ),
+                      ),
                     ),
-                    color: Colors.green.shade800,
-                  ),
+                    Expanded(
+                      flex: widget.steps.length - (_currentIndex + 1),
+                      child: Container(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ],
                 ),
+              )
+            : SizedBox(
+                height: 16,
               ),
-              Expanded(
-                flex: widget.steps.length - (_currentIndex + 1),
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Spacer(),
-        Flexible(
-          flex: 2,
-          child: AbsorbPointer(
-            absorbing: true,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: widget.steps.length,
-              itemBuilder: (context, index) {
-                return _buildAnimatedWidget(
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
+        Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: SizedBox(
+            height: kToolbarHeight,
+            child: AbsorbPointer(
+              absorbing: true,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.steps.length,
+                itemBuilder: (context, index) {
+                  return _buildAnimatedWidget(
+                    Container(
+                      height: kToolbarHeight,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.black54,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: const [
                           BoxShadow(
@@ -172,21 +168,18 @@ class M7LivelynessDetectionStepOverlayState
                         widget.steps[index].title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
+                          color: Colors.white,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ),
-                  isExiting: index != _currentIndex,
-                );
-              },
+                    isExiting: index != _currentIndex,
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        const Spacer(
-          flex: 14,
         ),
       ],
     );

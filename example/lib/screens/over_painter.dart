@@ -69,7 +69,6 @@ class OvalFramePainter extends CustomPainter {
 
     for (final pathMetric in pathMetrics) {
       final pathLength = pathMetric.length;
-      log(pathLength.toString());
       while (currentLength < pathLength) {
         final start = currentLength;
         final end = (currentLength + dashWidth).clamp(0, pathLength).toDouble();

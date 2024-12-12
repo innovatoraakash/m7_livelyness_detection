@@ -506,6 +506,7 @@ class _MLivelyness7DetectionScreenState
         if (_customPaint != null) _customPaint!,
         M7LivelynessDetectionStepOverlay(
           key: _stepsKey,
+          config: widget.config,
           steps: _steps,
           onCompleted: () => Future.delayed(
             const Duration(milliseconds: 500),
