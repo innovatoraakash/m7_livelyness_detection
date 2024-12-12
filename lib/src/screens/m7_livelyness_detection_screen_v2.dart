@@ -409,7 +409,7 @@ class _M7LivelynessDetectionScreenAndroidState
     }
     _cameraState?.when(
       onPhotoMode: (p0) => Future.delayed(
-        const Duration(milliseconds: 500),
+        const Duration(milliseconds: 100),
         () => p0.takePhoto().then(
           (value) {
             // if (detectedFace != null) {
