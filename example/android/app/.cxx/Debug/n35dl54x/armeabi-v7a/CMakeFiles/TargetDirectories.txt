@@ -1,0 +1,2 @@
+/Users/aakashghimire/Development/m7_livelyness_detection/example/android/app/.cxx/Debug/n35dl54x/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/aakashghimire/Development/m7_livelyness_detection/example/android/app/.cxx/Debug/n35dl54x/armeabi-v7a/CMakeFiles/rebuild_cache.dir

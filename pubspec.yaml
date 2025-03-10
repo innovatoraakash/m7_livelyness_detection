@@ -33,14 +33,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.example.m7_livelyness_detection
-        pluginClass: M7LivelynessDetectionPlugin
-      ios:
-        pluginClass: M7LivelynessDetectionPlugin
-
   # To add assets to your plugin package, add an assets section, like this:
   assets:
     - packages/m7_livelyness_detection/src/assets/lottie/livelyness-start.json
