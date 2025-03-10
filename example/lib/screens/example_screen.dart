@@ -58,12 +58,22 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
           step: M7LivelynessStep.turnLeft,
           title: "left",
           isCompleted: false,
+          suffixIcon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 50,
+          ),
           detectionColor: Colors.green.shade800,
         ),
         M7LivelynessStepItem(
           step: M7LivelynessStep.turnRight,
           title: "right",
           isCompleted: false,
+          suffixIcon: const Icon(
+            Icons.swipe_right_alt_outlined,
+            color: Colors.white,
+            size: 50,
+          ),
           detectionColor: Colors.green.shade800,
         ),
       ],

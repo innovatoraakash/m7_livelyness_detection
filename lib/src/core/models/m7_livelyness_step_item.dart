@@ -4,6 +4,8 @@ class M7LivelynessStepItem {
   //enum
   final M7LivelynessStep step;
   final String title;
+  final Widget? suffixIcon;
+  final Widget? titleWidget;
   final double? thresholdToCheck;
   final bool isCompleted;
   final Color? detectionColor;
@@ -12,6 +14,8 @@ class M7LivelynessStepItem {
     required this.step,
     required this.title,
     this.thresholdToCheck,
+    this.suffixIcon,
+    this.titleWidget,
     required this.isCompleted,
     this.detectionColor,
   });
@@ -19,6 +23,8 @@ class M7LivelynessStepItem {
   M7LivelynessStepItem copyWith({
     M7LivelynessStep? step,
     String? title,
+    final Widget? suffixIcon,
+    final Widget? titleWidget,
     double? thresholdToCheck,
     bool? isCompleted,
     Color? detectionColor,
@@ -28,6 +34,8 @@ class M7LivelynessStepItem {
       title: title ?? this.title,
       thresholdToCheck: thresholdToCheck ?? this.thresholdToCheck,
       isCompleted: isCompleted ?? this.isCompleted,
+      suffixIcon: suffixIcon ?? this.suffixIcon,
+      titleWidget: titleWidget ?? this.titleWidget,
       detectionColor: detectionColor ?? this.detectionColor,
     );
   }
@@ -41,6 +49,8 @@ class M7LivelynessStepItem {
       result.addAll({'thresholdToCheck': thresholdToCheck});
     }
     result.addAll({'isCompleted': isCompleted});
+    result.addAll({'suffixIcon': suffixIcon});
+    result.addAll({'titleWidget': titleWidget});
     if (detectionColor != null) {
       result.addAll({'detectionColor': detectionColor!.value});
     }
