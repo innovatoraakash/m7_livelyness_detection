@@ -1,7 +1,7 @@
 # This is a generated file; do not edit or check into version control.
-camera=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera-0.11.0+2/
-camera_android_camerax=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera_android_camerax-0.6.10/
-camera_avfoundation=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.17+5/
+camera=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera-0.10.3+2/
+camera_android=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera_android-0.10.10+1/
+camera_avfoundation=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.18+9/
 camera_web=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camera_web-0.3.5/
 camerawesome=/Users/aakashghimire/.pub-cache/hosted/pub.dev/camerawesome-2.1.0/
 flutter_plugin_android_lifecycle=/Users/aakashghimire/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.23/

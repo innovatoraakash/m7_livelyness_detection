@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   animate_do: 
-  camera: 
+  camera: 0.10.3+2
   collection: 
   equatable:
   flutter:

@@ -3,4 +3,6 @@ enum M7LivelynessStep {
   turnLeft,
   turnRight,
   smile,
+  lookUp,
+  lookDown,
 }

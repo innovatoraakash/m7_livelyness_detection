@@ -131,6 +131,10 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         return "Turn Your Head Right";
       case M7LivelynessStep.smile:
         return "Smile";
+      case M7LivelynessStep.lookDown:
+        return "Look Down";
+      case M7LivelynessStep.lookUp:
+        return "Look Up";
       default:
         return "Be Straint for capture";
     }
@@ -146,6 +150,10 @@ class _M7ExpampleScreenState extends State<M7ExpampleScreen> {
         return "Detects Right Turn of the on the face visible in camera";
       case M7LivelynessStep.smile:
         return "Detects Smile on the face visible in camera";
+      case M7LivelynessStep.lookDown:
+        return "Look Down";
+      case M7LivelynessStep.lookUp:
+        return "Look Up";
       default:
         return "Be Straint for capture";
     }

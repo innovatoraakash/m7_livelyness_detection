@@ -359,6 +359,23 @@ class _M7LivelynessDetectionScreenAndroidState
           await _completeStep(step: step);
         }
         break;
+      case M7LivelynessStep.lookUp:
+        debugPrint(face.toString());
+
+        if ((face.headEulerAngleX ?? 0) > (headTurnThreshold.rotationAngle)) {
+          _startProcessing();
+          await _completeStep(step: step);
+        }
+        break;
+
+      case M7LivelynessStep.lookDown:
+        debugPrint(face.toString());
+
+        if ((face.headEulerAngleX ?? 0) < (-headTurnThreshold.rotationAngle)) {
+          _startProcessing();
+          await _completeStep(step: step);
+        }
+        break;
     }
   }
 

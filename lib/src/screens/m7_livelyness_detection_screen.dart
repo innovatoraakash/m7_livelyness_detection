@@ -421,6 +421,12 @@ class _MLivelyness7DetectionScreenState
             await _completeStep(step: step);
           }
           break;
+        case M7LivelynessStep.lookUp:
+          // TODO: Handle this case.
+          break;
+        case M7LivelynessStep.lookDown:
+          // TODO: Handle this case.
+          break;
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
