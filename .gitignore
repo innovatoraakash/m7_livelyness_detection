@@ -31,4 +31,6 @@ build/
 ios/Pods/**
 ios/Podfile.lock
 ios/.symlinks/**
-.fvm/flutter_sdk
+
+# FVM Version Cache
+.fvm/

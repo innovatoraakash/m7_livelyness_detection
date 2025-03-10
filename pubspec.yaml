@@ -6,7 +6,7 @@ repository: https://github.com/Meet-7-dating/m7_livelyness_detection/
 issue_tracker: https://github.com/Meet-7-dating/m7_livelyness_detection/issues
 
 environment:
-  sdk: '>=2.18.6 <3.0.0'
+  sdk: '>=2.18.6 <4.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
