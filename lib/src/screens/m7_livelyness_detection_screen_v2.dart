@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:collection/collection.dart';
 import 'package:m7_livelyness_detection/index.dart';
 
