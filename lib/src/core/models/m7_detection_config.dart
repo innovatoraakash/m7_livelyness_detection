@@ -21,6 +21,9 @@ class M7DetectionConfig {
   /// Icon color of the button that will come after the [maxSecToDetect] is completed.
   final Color? captureButtonColor;
 
+  /// Function that runs on step changes.
+  final Function(int index , M7LivelynessStep step)? onStepChange;
+
   final Function(Widget child, int step)? wrapper;
 
   M7DetectionConfig(
@@ -30,6 +33,7 @@ class M7DetectionConfig {
       this.allowAfterMaxSec = false,
       this.captureButtonColor,
       this.showCloseButton = true,
+      this.onStepChange,
       this.showStepper = true,
       this.wrapper}) {
     assert(
